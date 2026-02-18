@@ -1,52 +1,41 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h> /* includes fork */
-#include <stdint.h> /* for pid_t */
+#include <unistd.h> /* execve() sys call */
 
 /*
- * === What is fork() ? ===
- * Fork is a system call provided by <unistd.h> that makes a perfect copy of the existing program   ...
- * and allows it to run seperaetly by using different CPU page tables on memory with its own        ...
- * stack and heap.
+ * === What is execve() ? ===
+ * `execve()` is a Linux system call that executes another program (typically already compiled) and ...
+ * completely replaces it with the current one. 
  *
- * === How does this differ from threads? ===
- * A thread is similar to a fork; A child process is created. However, a thread is a parent-child   ...
- * that share the same memory space. While a fork is a parent-child that share independent memory   ...
- * spaces. You can reference a global var shared by a thread parent-child, but not for a fork       ...
- * parent-child.
+ * For example, this program will attempt to run `ls` with the arguments `ls -la /home/`. ls can    ...
+ * is a standard binary found in /bin/ls. When `execve` launches ls, it completely destroys this    ...
+ * program and completely replaces the memory space (using the same PID) with the newly executed    ...
+ * program.
  *
- * === getpid(), getppid(), and pid 0 ===
- * When you call `getpid()`, it will return the PID of THIS forked program. `getppid()` will return ...
- * the pid of the parent process. `pid_t` is a data-type that under the right context, stores pid.  ...
- * Its actually just a signed integer typedef but being explicit in C is quite important.
- *
- * When `child_pid` is equal to 0 in the example below, we know that THIS program is the child. If  ...
- * it is -1 we have an error, anything else is the parent. 
+ * === Why would I destroy my current program with a new one? ===
+ * A good combination is using `fork()` + `execve()` to create a parent child relationship between  ...
+ * two programs. You can fork *this* program, and then call `execve()` to replace the child with    ...
+ * another program all-together, keep the same PID the child had.
  */
 
 int main () {
-  printf("\n=== Starting Fork Example ===");
-  
-  pid_t child_pid;
+  printf("=== Using execve() to run ls ===");
 
-  /* create a child of this program using fork */
-  child_pid = fork();
+  /* the target program we wish to execute */
+  char *target = "/bin/ls";
 
-  /* there was an error with fork */
-  if (child_pid == -1) {
-    perror("fork");
-    return EXIT_FAILURE;
-  } else if (child_pid == 0) {
-    printf("\nChild exiting, pid 0\n");
-    printf("getpid(): %jd\n", getpid());
-    return EXIT_SUCCESS;
-  } else {
-    printf("\nChild PID: %jd\n", child_pid);
-    printf("\nParent exiting\n");
-    printf("getpid(): %jd\n", getpid());
-    return EXIT_SUCCESS;
-  }
+  /* arguments getting passed to the child usurper */
+  char *argv[] = {"ls", "-la", "/home/", NULL};
 
-  return EXIT_SUCCESS;
+  /* environment getting passed to the child usurper */
+  char *envp[] = { NULL };
+
+  /* call execve, filling in the arguments created above */
+  execve(target, argv, envp);
+
+  /* if execve failed, this printf below will print */
+  printf("\n\n=== EXECVE FAILED ===\n\n");
+
+  return EXIT_FAILURE;
 }
