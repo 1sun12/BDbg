@@ -1,0 +1,96 @@
+# ============================================================================
+# MAKEFILE EXPLANATION
+# ============================================================================
+#
+# HOW THIS MAKEFILE WORKS:
+# ------------------------
+# 1. Find all .c files in src/ using wildcard
+# 2. Transform those paths (src/*.c) into object file paths (obj/*.o)
+# 3. Compile each .c file into a .o file
+# 4. Link all .o files together into the final executable in bin/
+#
+# SPECIAL CHARACTERS DICTIONARY:
+# -------------------------------
+# $()     = Variable expansion (like ${} in bash)
+#           Example: $(CC) becomes "gcc"
+#
+# :       = Two uses:
+#           1. In rules: "target: dependencies" (means "target needs these")
+#           2. In variables: Pattern substitution $(VAR:old=new)
+#
+# %       = Wildcard pattern that "captures" text and reuses it
+#           Example: src/%.c matches "src/main.c" where % = "main"
+#           Then obj/%.o becomes "obj/main.o" (reusing "main")
+#
+# *       = Glob pattern - matches any characters in filenames
+#           Example: *.c matches all files ending in .c
+#           Must use with wildcard function: $(wildcard src/*.c)
+#
+# $@      = Automatic variable meaning "the target name"
+#           In rule "foo: bar", $@ = "foo"
+#
+# $<      = Automatic variable meaning "first dependency"
+#           In rule "foo: bar baz", $< = "bar"
+#
+# $^      = Automatic variable meaning "all dependencies"
+#           In rule "foo: bar baz", $^ = "bar baz"
+#
+# |       = Order-only prerequisite (must exist, but doesn't trigger rebuild)
+#           Example: $(TARGET): $(OBJECTS) | $(BIN_DIR)
+#           Means: "bin/ must exist before building, but if bin/ timestamp 
+#                   changes, don't rebuild the target"
+#
+# @       = Silence command echo
+#           Example: @echo "Building..." (doesn't print the command itself)
+#
+# .PHONY  = Declares targets that aren't actual files
+#           Example: "clean" isn't a file, it's a command to run
+
+# ============================================================================
+
+# ~ Compiler
+CC = gcc
+FLAGS = -Wall -Wextra -std=gnu17 -g
+
+# ~ Directories
+SRC_DIR = src
+INC_DIR = include
+OBJ_DIR = obj
+BIN_DIR = bin
+
+# ~ Silent
+NDIR = --no-print-directory
+
+# ~ Target exec
+TARGET = $(BIN_DIR)/bdbg
+
+# ~ Source files and objects
+SOURCES = $(wildcard $(SRC_DIR)/*.c)
+OBJECTS = $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+
+# ~ Default
+all: $(TARGET)
+
+# ~ Link objects to create the executable
+$(TARGET): $(OBJECTS) | $(BIN_DIR)
+	@$(CC) $(OBJECTS) -o $@
+
+# ~ Compile source files to objects
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	@$(CC) $(FLAGS) -I$(INC_DIR) -c $< -o $@
+
+# ~ Create directories if they do not exist
+$(BIN_DIR) $(OBJ_DIR):
+	@mkdir -p $@
+
+# ~ Run the executable
+run: $(TARGET)
+	@sudo $(TARGET)
+	@$(MAKE) $(NDIR) clean
+
+# ~ Clean directory
+clean:
+	@rm -rf $(OBJ_DIR) $(BIN_DIR)
+
+# ~ Phony targets
+.PHONY: all run clean
