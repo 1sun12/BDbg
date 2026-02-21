@@ -6,12 +6,16 @@
 #include <stdint.h> /* pid_t */
 #include <unistd.h> /* fork, execve, sleep */
 
-int main() {
-  pid_t child_pid = -1;
-  status = 0;
+#include "debug.h"
 
-  char *target = "../trgt-prog/trgt-prog";
-  char *argv = { NULL };
+int main() {
+  DBG("main: Starting main...");
+
+  pid_t child_pid = -1;
+  int status = 0;
+
+  char *target = "trgt-prog/trgt-prog";
+  char *argv[] = { NULL };
   char *envp[] = { NULL };
 
   if ((child_pid = fork()) == -1) perror("fork");
@@ -21,8 +25,8 @@ int main() {
     execve(target, argv, envp);
 
     /* execve failed */
-    perror("execve");
-    return EXIT FAILURE;
+    perror("[ERROR] execve");
+    return EXIT_FAILURE;
   } else {
     /* parent is now in control, do stuff */
     waitpid(child_pid, &status, 0);
