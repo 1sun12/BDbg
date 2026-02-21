@@ -74,7 +74,12 @@ int main() {
   } else {
     /* parent is now in control, do stuff */
     waitpid(child_pid, &status, 0);
-
+    
+    // child is currently paused by a SIGTRAP 
+    // obtain status and compare it to a wait macro
+    // if this macro --> do this action
+    // tell the child they can continue 
+    //
   }
 
   return EXIT_SUCCESS;

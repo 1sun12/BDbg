@@ -8,7 +8,7 @@
  *      PTRACE_TRACEME          - Child calls this to consent to being traced.
  *      PTRACE_ATTACH           - Attach to an already running process.
  *      PTRACE_DETACH           - Detach from the tracee, letting the process run freely again.
- *      PTRACE_KILL             - "Kill the jedi children, Anakin" - Palpatine
+ *      PTRACE_KILL             - "Kill the jedi children, Anakin" - Palpatine, (sortof :] )
  *
  *      ==== Execution Control ====
  *
@@ -51,3 +51,18 @@
  *          --> PTRACE_CONT
  *      waitpid again --> repeat until WIFEXITED
  */
+
+#ifndef TRACE_H
+#define TRACE_H 
+
+typedef struct trace_t trace_t;
+struct trace_t {
+    
+};
+
+#endif
+
+
+
+
+
