@@ -59,6 +59,10 @@ int main() {
    *                child.
    *    else    child_pid is not the child.
    *        then    THIS is the parent, use `waitpid()` and other to manipulate the child program.
+   *                1st, use `waitpid()` to capture the child's current status. 
+   *                2nd, do something based on this status.
+   *                3rd, use `PTRACE_CONT` to press play again on the child, letting it run.
+   *                4th, use `waitpid()` again; child will either stop again or exit.
    */
   if (child_pid == 0) {
     ptrace(PTRACE_TRACEME, 0, NULL, NULL);
