@@ -25,6 +25,8 @@ int main() {
     return EXIT FAILURE;
   } else {
     /* parent is now in control, do stuff */
+    waitpid(child_pid, &status, 0);
+
   }
 
   return EXIT_SUCCESS;
