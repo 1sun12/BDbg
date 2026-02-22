@@ -10,6 +10,20 @@ wait_t *wait_create() {
   /* init variables */
   create->test = 5;
 
+  /* wire up function pointers */
+  destroy = &wait_destroy;
+
   /* return new wait */
   return create;
+}
+
+void wait_destroy(wait_t **self) {
+  /* create a temp storing the address inside of self */
+  wait_t *trash = *self; 
+
+  /* free this memory */
+  free(trash);
+
+  /* don't forget to NULL the pointer */
+  trash = NULL;
 }

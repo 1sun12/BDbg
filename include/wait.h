@@ -37,7 +37,9 @@ typedef struct wait_t wait_t;
 struct wait_t {
   int test;
 
+  void (*destroy)(wait_t **);
 };
 
 wait_t *wait_create();
+void wait_destroy(wait_t **self);
 #endif
