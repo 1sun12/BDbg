@@ -24,3 +24,20 @@
  *      WUNTRACED   - Report stopped children, not just terminated ones. 
  *      WCONTINUED  - Report children resumed by `SIGCONT`. 
  */
+
+#ifndef WAIT_H
+#define WAIT_H 
+
+/* includes */
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+typedef struct wait_t wait_t;
+struct wait_t {
+  int test;
+
+};
+
+wait_t *wait_create();
+#endif

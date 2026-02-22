@@ -7,6 +7,7 @@
 #include <unistd.h> /* fork, execve, sleep */
 
 #include "debug.h"
+#include "wait.h"
 
 int main() {
   DBG("main: Starting main...");
@@ -73,7 +74,14 @@ int main() {
     return EXIT_FAILURE;
   } else {
     /* parent is now in control, do stuff */
+    wait_t *waiter = NULL;
+    waiter = wait_create();
+    printf("\n\ntest num: %d\n", waiter->test);
     waitpid(child_pid, &status, 0);
+
+    
+
+
     
     // child is currently paused by a SIGTRAP 
     // obtain status and compare it to a wait macro
