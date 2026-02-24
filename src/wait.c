@@ -7,11 +7,8 @@ wait_t *wait_create() {
   wait_t *create = NULL;
   create = (wait_t *)malloc(sizeof(wait_t));
 
-  /* init variables */
-  create->test = 5;
-
   /* wire up function pointers */
-  destroy = &wait_destroy;
+  create->destroy = &wait_destroy;
 
   /* return new wait */
   return create;

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <sys/wait.h> /* wait, waitpid, WIFEXITED */
 #include <sys/ptrace.h> /* ptrace */
+#include <sys/user.h> /* struct user_regs_struct */
 #include <stdint.h> /* pid_t */
 #include <unistd.h> /* fork, execve, sleep */
 
@@ -76,11 +77,59 @@ int main() {
     /* parent is now in control, do stuff */
     wait_t *waiter = NULL;
     waiter = wait_create();
-    printf("\n\ntest num: %d\n", waiter->test);
-    waitpid(child_pid, &status, 0);
-
     
+    /* while the program is being stopped by sig traps */
+    do {
+      waitpid(child_pid, &status, 0);
+      DBG("main: do-while is starting...\n");
+      pid_t sig_pid = WSTOPSIG(status);
+      printf("stopped by signal: \t%d\n",sig_pid);
+      
+      /* create a struct to hold all CPU registers */
+      struct user_regs_struct regs;
+      /* get all regs from ptrace */
+      ptrace(PTRACE_GETREGS, child_pid, NULL, &regs);
+      /* print the current instruction address */
+      printf("rip: \t%llu\n", regs.rip);
 
+      /* single step to next instruction */
+      ptrace(PTRACE_SINGLESTEP, child_pid, NULL, NULL);
+
+      DBG("main: do-while is ending...\n");
+    } while(WIFSTOPPED(status));
+
+    /*
+      struct user_regs_struct {
+      unsigned long r15;
+      unsigned long r14;
+      unsigned long r13;
+      unsigned long r12;
+      unsigned long rbp;
+      unsigned long rbx;
+      unsigned long r11;
+      unsigned long r10;
+      unsigned long r9;
+      unsigned long r8;
+      unsigned long rax;
+      unsigned long rcx;
+      unsigned long rdx;
+      unsigned long rsi;
+      unsigned long rdi;
+      unsigned long orig_rax;
+      unsigned long rip;
+      unsigned long cs;
+      unsigned long eflags;
+      unsigned long rsp;
+      unsigned long ss;
+      unsigned long fs_base;
+      unsigned long gs_base;
+      unsigned long ds;
+      unsigned long es;
+      unsigned long fs;
+      unsigned long gs;
+  };
+
+    */
 
     
     // child is currently paused by a SIGTRAP 

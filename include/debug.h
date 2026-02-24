@@ -4,7 +4,7 @@
  * @brief If set to 1, debug messages will print. If set to 0, debug messages will not print
  * @Use `#define DEBUG_ENABLED 1` (or) `#define DEBUG_ENABLED 0`
  */
-#define DEBUG_ENABLED 1
+#define DEBUG_ENABLED 0
 
 /**
  *  @title DBG(msg)
