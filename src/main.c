@@ -90,7 +90,7 @@ int main() {
       /* get all regs from ptrace */
       ptrace(PTRACE_GETREGS, child_pid, NULL, &regs);
       /* print the current instruction address */
-      printf("rip: \t%llu\n", regs.rip);
+      printf("rip: \t0x%llx\n", regs.rip);
 
       /* single step to next instruction */
       ptrace(PTRACE_SINGLESTEP, child_pid, NULL, NULL);
