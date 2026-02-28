@@ -90,7 +90,8 @@ run: $(TARGET)
 
 # ~ Clean directory
 clean:
-	@rm -rf $(OBJ_DIR) $(BIN_DIR)
+	@rm $(OBJ_DIR)/*
+	@rm $(BIN_DIR)/*
 
 # ~ Phony targets
 .PHONY: all run clean
