@@ -30,16 +30,12 @@ int main (void) {
     /* parent testing the wait api */
     printf("~ Testing wait api ~\n");
     wait_t *wait_api = NULL;
-    wait_api = wait_create();
+    wait_api = wait_create(51000, 0);
     printf("\n\n\n\n\n\n\n\n");
     wait_api->help_me();
-    
-    int test = 51000;
 
     wait_api->wait(wait_api);
-    wait_api->set_cpid(wait_api, (int)test);
     printf("get cpid: %d\n", wait_api->get_cpid(wait_api));
-    wait_api->set_op(wait_api, 0);
     printf("get op: %d\n", wait_api->get_op(wait_api));
     printf("~ Testing wait api ~\n");
   }

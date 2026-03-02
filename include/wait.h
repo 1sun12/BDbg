@@ -40,10 +40,33 @@ typedef enum {
 
 typedef struct wait_t wait_t;
 struct wait_t {
-  /* variables */
+  /* ===== Variables ===== */
+  /**
+   *    @title cpid 
+   *    @brief Child process id; The pid number of the child program.
+   */
   pid_t cpid;
+
+  /**
+   *    @title status 
+   *    @brief 16-Bit packed integer containing a few context clues of what waitpid returned. 
+   *    Bits 0 - 6      0000000001111111    Signal number
+   *    Bit 7           0000000010000000    Core was dumped? (t or f)
+   *    Bits 8 - 15     1111111100000000    Exit code
+   */
   int status;
+
+  /**
+   *    @title option 
+   *    @brief Option code that is passed as the third argument to waitpid
+   */
   int option;
+  
+  /**
+   *    @title options_e 
+   *    @brief Enumeration used in setting option
+   */
+  wait_op_e options_e;
 
   /* psuedo methods */
   void (*help_me)(void);
@@ -67,7 +90,7 @@ void wait_help_me();
  *  @brief [!] Creates a new wait api object, and returns a pointer to that struct in memory
  *  @return wait_t *
  */
-wait_t *wait_create();
+wait_t *wait_create(pid_t cpid, int option);
 
 /**
  *  @title wait_destroy 

@@ -20,8 +20,8 @@ void wait_help_me() {
     " \t\tDESC \tCall as is to get this man page.\n"
     "\n"
     "NAME \twait_create\n"
-    " \t\tCASE \twait_t *temp = wait_create();\n"
-    " \t\tTYPE \twait_t *wait_create(void)\n"
+    " \t\tCASE \tpid_t cpid = fork(); wait_t *temp = wait_create(cpid, option);\n"
+    " \t\tTYPE \twait_t *wait_create(pid_t cpid, int option)\n"
     " \t\tDESC \tCreates a new wait api.\n"
     "\n"
     "NAME \twait_destroy\n"
@@ -32,12 +32,16 @@ void wait_help_me() {
   printf("%s", help);
 }
 
-wait_t *wait_create() {
+wait_t *wait_create(pid_t cpid, int option) {
   /* create a new wait api */
   wait_t *temp = NULL;
 
   /* [!] allocate memory */
   temp = (wait_t *)malloc(sizeof(wait_t));
+
+  /* initialize variables */
+  temp->cpid = cpid;
+  temp->option = option;
 
   /* wire up psuedo-methods */
   temp->help_me = wait_help_me;
