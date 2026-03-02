@@ -31,7 +31,6 @@ int main (void) {
     printf("~ Testing wait api ~\n");
     wait_t *wait_api = NULL;
     wait_api = wait_create(51000, 0);
-    printf("\n\n\n\n\n\n\n\n");
     wait_api->help_me();
 
     wait_api->wait(wait_api);

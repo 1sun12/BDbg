@@ -25,7 +25,8 @@
  *  WUNTRACED   - Report stopped children, not just terminated ones
  *  WCONTINUED  - Report children resumed by `SIGCONT`
  */
-typedef enum {
+
+typedef enum {  /* void wait_set_op(...) */
   WAIT_BLOCK,
   WAIT_NO_HANG,
   WAIT_UNTRACED,
