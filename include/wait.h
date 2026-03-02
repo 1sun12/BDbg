@@ -34,19 +34,14 @@ typedef enum {
 
 typedef struct wait_t wait_t;
 struct wait_t {
+  /* variables */
   pid_t pid;
   int status;
   int option;
 
-  /*
-   *    fork is called and a child process is created 
-   *    wait is used to control that child 
-   *    so fork is called 
-   *    then that child pid number is passed to the wait api as pid 
-   *    create wait api with default settings (0, blocks until child changes state) 
-   *
-   *
-   */
+  /* psuedo methods */
+  void (*help_me)(void);
+  void (*destroy)(wait_t **);
 };
 
 /**
@@ -67,6 +62,6 @@ wait_t *wait_create();
  *  @title wait_destroy 
  *  @brief Destroys wait api objects that were created using `wait_create`
  */
-void wait_destroy();
+void wait_destroy(wait_t **trash_ptr);
 
 #endif
