@@ -25,6 +25,12 @@
  *  WUNTRACED   - Report stopped children, not just terminated ones
  *  WCONTINUED  - Report children resumed by `SIGCONT`
  */
+typedef enum {
+  WAIT_BLOCK,
+  WAIT_NO_HANG,
+  WAIT_UNTRACED,
+  WAIT_CONTINUED
+} wait_op_e;
 
 typedef enum {
   WAIT_STOPPED,
@@ -35,13 +41,18 @@ typedef enum {
 typedef struct wait_t wait_t;
 struct wait_t {
   /* variables */
-  pid_t pid;
+  pid_t cpid;
   int status;
   int option;
 
   /* psuedo methods */
   void (*help_me)(void);
   void (*destroy)(wait_t **);
+  void (*wait)(wait_t *);
+  void (*set_cpid)(wait_t *, pid_t);
+  pid_t (*get_cpid)(wait_t *);
+  void (*set_op)(wait_t *, int);
+  int (*get_op)(wait_t *);
 };
 
 /**
@@ -63,5 +74,35 @@ wait_t *wait_create();
  *  @brief Destroys wait api objects that were created using `wait_create`
  */
 void wait_destroy(wait_t **trash_ptr);
+
+/**
+ *  @title wait_wait
+ *  @brief The actual system call to waitpid, wait api is to be configured first before calling
+ */
+void wait_wait(wait_t *self);
+
+/**
+ *  @title wait_set_cpid
+ *  @brief Set the pid of the child; Who are we waiting for?
+ */
+void wait_set_cpid(wait_t* self, pid_t cpid);
+
+/**
+ *  @title wait_get_cpid
+ *  @brief Get the pid of the child; Who are we waiting for?
+ */
+pid_t wait_get_cpid(wait_t* self);
+
+/**
+ *  @title wait_set_op
+ *  @brief Set the third argument, options, when calling waitpid
+ */
+void wait_set_op(wait_t *self, int op);
+
+/**
+ *  @title wait_get_op
+ *  @brief Get the third argument, options, when calling waitpid
+ */
+int wait_get_op(wait_t *self);
 
 #endif

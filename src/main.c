@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <stdint.h>
 
 #include "wait.h"
 
-int main (int argc, char *argv) {
+int main (void) {
   
   printf("main : starting program...\n");
 
@@ -32,7 +33,14 @@ int main (int argc, char *argv) {
     wait_api = wait_create();
     printf("\n\n\n\n\n\n\n\n");
     wait_api->help_me();
-    wait_destroy(&wait_api);
+    
+    int test = 51000;
+
+    wait_api->wait(wait_api);
+    wait_api->set_cpid(wait_api, (int)test);
+    printf("get cpid: %d\n", wait_api->get_cpid(wait_api));
+    wait_api->set_op(wait_api, 0);
+    printf("get op: %d\n", wait_api->get_op(wait_api));
     printf("~ Testing wait api ~\n");
   }
   

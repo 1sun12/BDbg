@@ -42,6 +42,12 @@ wait_t *wait_create() {
   /* wire up psuedo-methods */
   temp->help_me = wait_help_me;
   temp->destroy = wait_destroy;
+  temp->wait = wait_wait;
+  temp->set_cpid = wait_set_cpid;
+  temp->get_cpid = wait_get_cpid;
+  temp->set_op = wait_set_op;
+  temp->get_op = wait_get_op;
+
 
   /* return the new wait api */
   return temp;
@@ -51,4 +57,25 @@ void wait_destroy(wait_t **trash_ptr) {
   wait_t *trash = *trash_ptr;   /* needed for the 3rd step :] */
   free(trash);                  /* trash the memory block where wait api is stored */
   *trash_ptr = NULL;            /* clean up the pass-by-reference pointer */
+}
+
+void wait_wait(wait_t *self) {
+  self->get_cpid(self);
+  printf("~ wait_wait ~\n");
+}
+
+void wait_set_cpid(wait_t *self, pid_t x) {
+  self->cpid = x;
+};
+
+pid_t wait_get_cpid(wait_t *self) {
+  return self->cpid;
+}
+
+void wait_set_op(wait_t *self, int x) {
+  self->option = x;
+}
+
+int wait_get_op(wait_t *self) {
+  return self->option;
 }
