@@ -30,6 +30,7 @@ int main (int argc, char *argv) {
     printf("~ Testing wait api ~\n");
     wait_t *wait_api = NULL;
     wait_api = wait_create();
+    printf("\n\n\n\n\n\n\n\n");
     wait_api->help_me();
     wait_destroy(&wait_api);
     printf("~ Testing wait api ~\n");
