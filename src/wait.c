@@ -83,6 +83,7 @@ void wait_destroy(wait_t **trash_ptr) {
 
 void wait_wait(wait_t *self) {
   /* call waitpid */
+  
 }
 
 void wait_set_cpid(wait_t *self, pid_t x) {
