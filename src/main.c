@@ -12,7 +12,7 @@ int main (void) {
 
   pid_t child_pid;
 
-  child_pid = fork();
+  // child_pid = fork();
 
   if (child_pid == 0) {
     printf("I am the child!\n");
@@ -31,13 +31,25 @@ int main (void) {
     printf("~ Testing wait api ~\n");
     wait_t *wait_api = NULL;
     wait_api = wait_create(51000, 0);
-    wait_api->help_me();
+    //wait_api->help_me();
 
     wait_api->wait(wait_api);
     printf("get cpid: %d\n", wait_api->get_cpid(wait_api));
     printf("get op: %d\n", wait_api->get_op(wait_api));
     printf("~ Testing wait api ~\n");
   }
+
+  int status = 141;
+  printf("status bits: 0b");
+  for (int i = 15; i >= 0; i--) {
+    if ((status & (1 << i)) >= 1) {
+      printf("1");
+    } else {
+      printf("0");
+    }
+  }
+
+  printf("\n");
   
   
   return EXIT_SUCCESS;
