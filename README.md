@@ -69,10 +69,6 @@ Once attached, BDbg drops into a command prompt. From there you can set breakpoi
 - Live memory scanning and patching (think Cheat Engine, but in the terminal)
 - Expanded breakpoint management (listing, enabling, disabling)
 
-## Why This Project
-
-Debuggers sit at the intersection of everything that matters for CNO work: process internals, memory layout, instruction execution, signal handling, and the same ptrace mechanisms used by anti-debugging techniques, process injection, and runtime analysis tools. If you can build one, you can take one apart. That's the point.
-
 ## License
 
 MIT
