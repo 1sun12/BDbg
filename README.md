@@ -1,6 +1,12 @@
 # BDbg
 
-A Linux process debugger written in C. Attaches to a running process via ptrace; reads memory, inspects registers, and steps through execution. Built because the best way to understand a debugger is to write one from scratch.
+A Linux process debugger written in C. Attaches to a running process via ptrace; reads memory, inspects registers, and steps through execution. Though xdbg is a great tool and much more maintained than what I can create as a solo developer, I find it to be limited as just an analyzation tool, what if we could do... more?
+
+I bring you: BDbg
+
+The inspiration for this tool was actually CheatEngine; live scanning and live patching of memory blocks.
+
+However let's bring those capabilities and more to a CLI tool like xdbg, and that leaves you with BDbg.
 
 ## What It Does
 
